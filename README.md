@@ -85,7 +85,7 @@ MRR@10 on the test sets with the frozen retriever (Table 2 of the paper); MemRev
 ## Installation
 
 ```bash
-git clone https://github.com/MohammedAli9330/MemRevise && cd MemRevise
+git clone https://github.com/DataScienceUIBK/MemRevise && cd MemRevise
 python -m venv .venv-writer      # the writer, and the LLM competitors
 .venv-writer/bin/pip install torch==2.11.0 transformers==5.11.0 peft==0.19.1 accelerate==1.13.0 huggingface_hub==1.18.0 vllm==0.22.1
 python -m venv .venv-retriever   # retrieval, evaluation, and the T5, ConvGQR and ChatRetriever competitors
