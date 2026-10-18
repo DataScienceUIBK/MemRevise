@@ -1,0 +1,16 @@
+# Two environments were used, because the writer (Ministral 3) needs transformers 5 while the retriever was run with transformers 4.51.
+# Writer (memrevise.write_memory, memrevise.train; the competitors on vLLM: llm_rewrite, chiq_ad, cmt_rag, convsearch_r1):
+#   pip install torch==2.11.0 transformers==5.11.0 peft==0.19.1 accelerate==1.13.0 huggingface_hub==1.18.0 vllm==0.22.1
+# Retriever (memrevise.search, encode_corpus, evaluate and the topic-repair process started by write_memory; competitors.score_queries,
+# t5qr, convgqr, chatretriever and their training):
+#   pip install torch==2.10.0 transformers==4.51.0 huggingface_hub==0.36.2 safetensors==0.7.0 numpy
+#   pip install peft==0.18.1 sentencepiece tiktoken einops transformers_stream_generator      (the competitors)
+#   and point MEMREVISE_RETRIEVER_PYTHON at that environment's python when running write_memory or cmt_rag.
+# ConvSearch-R1-FT's GRPO training runs in the authors' verl environment (github.com/BeastyZ/ConvSearch-R1); its data needs pandas and pyarrow.
+torch
+transformers
+peft
+accelerate
+huggingface_hub
+safetensors
+numpy

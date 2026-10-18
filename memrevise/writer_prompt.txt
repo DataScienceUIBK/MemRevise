@@ -1,0 +1,51 @@
+You update a conversation MEMORY one turn at a time. You never see the conversation itself: you see the MEMORY built from the earlier turns (every topic in the order it came up, its kind, the turns it was discussed in, its status, the facts stored for it, and a log of what each earlier turn did), the LAST QUESTION kept in memory, and the NEW TURN (its question, and its answer when the answer is already known). The NEW TURN is the CURRENT turn below. Analyze ONLY the CURRENT turn (use the MEMORY to resolve references and dependencies; earlier turn numbers are the ones shown in the memory). Output ONE JSON object:
+{
+  "depends_on": [<prior turn numbers this turn relies on; [] if fully self-contained>],
+  "contradicts": ["<prior entity name(s) this turn CORRECTS/REPLACES; [] otherwise>"],
+  "ops": [{"op": "<ADD|REFINE|REVISE|ABANDON|REACTIVATE|RETRACT>", "entity": "<canonical name>", "detail": "<optional short phrase>"}],
+  "asked": ["<canonical full name(s) of the entity/entities the CURRENT turn is ABOUT; resolve every pronoun/ellipsis; usually 1, up to 3 for a multi-topic turn>"],
+  "query": "<ONLY when the prompt ends with WRITE THE QUERY: yes -- ONE search query for this turn; otherwise leave this field out>",
+  "facts": [{"entity": "<canonical full name this fact is about>", "fact": "<ONE short grounded SENTENCE the CURRENT turn's question+answer establishes>"}],
+  "types": {"<entity name that is NEW in this turn>": "<one of ['person', 'work', 'place', 'organization', 'event', 'date', 'concept', 'object', 'other']>"}
+}
+
+RULES (read carefully):
+- facts: extract EVERY salient fact the CURRENT turn's Q+A establishes — one NATURAL SENTENCE per
+  fact (2-5 typical), NOT a single summary. PRESERVE the exact relation and terms from the answer
+  ("Dunkirk was released on DVD on 18 December 2017", NOT "Dunkirk has-property 18 December 2017";
+  keep "shot in", "is about", "krill" — never crush them into a generic predicate). Full canonical
+  names, no pronouns.
+- depends_on (LOAD-BEARING — be precise): the prior turn numbers that introduce the entity or the
+  fact THIS turn presupposes. ALWAYS include the turn that first named the entity in "asked", PLUS
+  any turn whose answer this question builds on. Use [] ONLY if the turn is fully self-contained
+  (introduces its own subject and needs no earlier context).
+- asked: the resolved TARGET (what a search must be ABOUT), never a pronoun.
+- ENTITY NAMES: use the SHORTEST canonical common name ("Urk", "Dunkirk", "Mercury"), NOT a long
+  legal/disambiguated title ("High and Low Lordship of Urk and Emmeloord") unless disambiguation
+  truly requires it. Be consistent across turns so the same entity links by exact name.
+- contradicts: emit ONLY when the turn retracts/corrects a prior premise ("no, I meant X");
+  otherwise [].
+- ops (what this turn DOES to the conversation's memory; most turns emit exactly one):
+    ADD        a new topic entity enters the conversation
+    REFINE     stays on the current entity, narrower facet (typical follow-up)
+    REVISE     a stated constraint/value about the entity is replaced with a new one
+    ABANDON    the user walks away from an entity ("not that one", "forget the X thing")
+    REACTIVATE the user returns to an entity discussed EARLIER ("the one I asked about before")
+    RETRACT    a prior premise is declared factually WRONG (stronger than ABANDON; also
+               list that entity in contradicts)
+  A correction turn typically emits ABANDON (the rejected topic(s)) + REACTIVATE (the
+  restored topic) TOGETHER. Resolve vague references ("the one from before") to the
+  canonical entity name using the MEMORY.
+- types: optional; tag entities you are confident about. Use ONLY the current turn's Q+A; never
+  invent facts and never use later turns. Output ONLY the JSON.
+NAMES: an entity name is the NAME of a thing (a person, work, place, organization, concept). NEVER use the user's
+question or a search string as a name, and never a long description when the thing has a name in the MEMORY or the NEW TURN.
+RETURNS: the user may go back to ANY earlier topic, often by DESCRIBING it ("going back to that Indian state",
+"the singer of that song", "the first city mentioned"). Resolve the description to that topic's name and REACTIVATE it.
+TWO ENTITIES: when the turn is about two things (a person AND their company, a singer AND the song), list both in
+"asked", the one the answer passage is most likely filed under FIRST.
+
+ORDER: write the fields in the order shown above: first what the turn builds on and what the user DOES (depends_on, contradicts, ops), then the topic it is about (asked), then the query when it is wanted.
+SAME NAME: when the user means a DIFFERENT thing that has the same name as a topic in the MEMORY ('i meant the actor, not the journalist'), keep the name and add the user's description in brackets: 'Jayson Blair (actor)'; ABANDON the old topic and REVISE to the new one. Brackets belong to NAMES only: in the TURN LOG an action's detail is written after a dash.
+TYPES: give a type only for an entity that is NEW in this turn; the MEMORY already shows the type of the others.
+QUERY: when the prompt ends with 'WRITE THE QUERY: yes', add "query": ONE natural search question about the topic in "asked". Keep the user's question whole, with every pronoun and description replaced by the topic's exact name. If the turn only corrects or points ('i meant X, not Y', 'no, the director') and asks nothing, ask the LAST QUESTION IN MEMORY about the topic. If the turn refers to something inside a stored fact (a list member, 'the second actor', 'his wife'), name that thing from the facts. Never mention a rejected topic. When the prompt ends with 'WRITE THE QUERY: no', leave "query" out.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="150" viewBox="0 0 560 150" role="img" aria-label="MemRevise">
+  <title>MemRevise</title>
+  <g transform="translate(4,2)">
+    <path d="M26,112 L38,28 L72,80" fill="none" stroke="#818CF8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M72,80 L106,28" fill="none" stroke="#6E7681" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 8"/>
+    <path d="M106,28 L118,112" fill="none" stroke="#6E7681" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 8"/>
+    <path d="M72,80 Q102,92 118,112" fill="none" stroke="#0D9488" stroke-width="7" stroke-linecap="round"/>
+    <path d="M112,127 Q76,150 44,129" fill="none" stroke="#EA580C" stroke-width="5" stroke-linecap="round"/>
+    <path d="M33,121 L50,124 L42,136 Z" fill="#EA580C" stroke="#EA580C" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="26" cy="112" r="10" fill="#0D1117" stroke="#818CF8" stroke-width="5"/><circle cx="38" cy="28" r="10" fill="#0D1117" stroke="#818CF8" stroke-width="5"/><circle cx="72" cy="80" r="10" fill="#0D1117" stroke="#60A5FA" stroke-width="5"/><circle cx="106" cy="28" r="10" fill="#0D1117" stroke="#6E7681" stroke-width="4" stroke-dasharray="5 4"/><circle cx="118" cy="112" r="10" fill="#0D1117" stroke="#2DD4BF" stroke-width="5"/>
+  </g>
+  <text x="160" y="86" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="-1"><tspan fill="#E6EDF3">Mem</tspan><tspan fill="#818CF8">Revise</tspan></text>
+  <text x="162" y="118" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="19" fill="#9DA7B3">A revisable memory for conversational search</text>
+</svg>

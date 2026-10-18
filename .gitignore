@@ -1,0 +1,8 @@
+corpus/
+encoded/
+models/
+outputs/
+logs/
+tools/
+__pycache__/
+*.pyc
